@@ -1,10 +1,21 @@
 <!-- Plugin Configuration File. Read more: https://plugins.jetbrains.com/docs/intellij/plugin-configuration-file.html -->
 <idea-plugin>
     <id>com.github.pescadorbob.dxinsights</id>
-    <name>dx-insights</name>
-    <vendor>pescadorbob</vendor>
+    <name>DX Insights</name>
+    <vendor email="pescador.bob@gmail.com" url="https://github.com/pescadorbob">Brent Fisher</vendor>
+
+    <description><![CDATA[
+        Tracks test execution metrics to help developers understand their testing patterns.
+        <ul>
+            <li>Records test execution frequency</li>
+            <li>Tracks test execution time</li>
+            <li>Shows daily and weekly statistics</li>
+            <li>Optional InfluxDB integration for team metrics</li>
+        </ul>
+    ]]></description>
 
     <depends>com.intellij.modules.platform</depends>
+    <depends>com.intellij.modules.java</depends>
 
     <resource-bundle>messages.MyBundle</resource-bundle>
 
