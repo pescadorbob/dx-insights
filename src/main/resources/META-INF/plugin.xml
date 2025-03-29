@@ -21,6 +21,9 @@
 
     <extensions defaultExtensionNs="com.intellij">
         <toolWindow factoryClass="com.github.pescadorbob.dxinsights.toolWindow.MyToolWindowFactory" id="MyToolWindow"/>
+        <toolWindow factoryClass="com.github.pescadorbob.dxinsights.toolwindow.DXToolWindowFactory" id="DXToolWindow"/>
         <postStartupActivity implementation="com.github.pescadorbob.dxinsights.startup.MyProjectActivity" />
     </extensions>
+
+    
 </idea-plugin>
