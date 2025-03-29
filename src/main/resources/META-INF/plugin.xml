@@ -20,8 +20,11 @@
     <resource-bundle>messages.MyBundle</resource-bundle>
 
     <extensions defaultExtensionNs="com.intellij">
-        <toolWindow factoryClass="com.github.pescadorbob.dxinsights.toolWindow.MyToolWindowFactory" id="MyToolWindow"/>
         <toolWindow factoryClass="com.github.pescadorbob.dxinsights.toolwindow.DXToolWindowFactory" id="DXToolWindow"/>
+        <applicationService serviceImplementation="com.github.pescadorbob.dxinsights.service.TestMetricsService"/>
+        <projectService serviceImplementation="com.github.pescadorbob.dxinsights.service.TestMetricsService"/>
+        <postStartupActivity implementation="com.github.pescadorbob.dxinsights.startup.TestMetricsStartupActivity"/>
+
         <postStartupActivity implementation="com.github.pescadorbob.dxinsights.startup.MyProjectActivity" />
     </extensions>
 
