@@ -4,14 +4,15 @@ import com.github.pescadorbob.dxinsights.service.TestMetricsService;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.wm.ToolWindow;
 import com.intellij.openapi.wm.ToolWindowFactory;
-import com.intellij.ui.components.JBLabel;
 import com.intellij.ui.components.JBPanel;
 import com.intellij.ui.content.ContentFactory;
+import com.intellij.util.messages.MessageBusConnection;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
 import java.awt.*;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -22,42 +23,51 @@ public class DXToolWindowFactory implements ToolWindowFactory {
 
     @Override
     public void createToolWindowContent(@NotNull Project project, @NotNull ToolWindow toolWindow) {
-        var dxToolWindow = new DXToolWindow(toolWindow );
+        var dxToolWindow = new DXToolWindow(project, toolWindow );
         var content = ContentFactory.getInstance().createContent(dxToolWindow.getContent(), null, false);
         toolWindow.getContentManager().addContent(content);
     }
 
     class DXToolWindow {
+        private final Project project;
         private final TestMetricsService service;
+        private JBPanel<JBPanel<?>> panel;
+        private JLabel statsLabel;
 
-        DXToolWindow(ToolWindow toolWindow){
+        JTable metricsTable;
+
+
+        DXToolWindow(Project project, ToolWindow toolWindow){
+            this.project = project;
             service = toolWindow.getProject().getService(TestMetricsService.class);
+            subscribeToMetricsUpdates();
+        }
+        private void subscribeToMetricsUpdates() {
+            MessageBusConnection messageBus;
+            messageBus = project.getMessageBus().connect();
+            messageBus.subscribe(TestMetricsChangedListener.TEST_METRICS_CHANGED_TOPIC, new TestMetricsChangedListener() {
+                @Override
+                public void testMetricsChanged() {
+                    updateStats();
+                }
+            });
+        }
+        private void updateStats() {
+            TestMetricsService service = project.getService(TestMetricsService.class);
+            TestMetricsService.State state = service.getState();
+
+            var model = generateMetricsTableModel(state);
+            metricsTable.setModel(model);
+            panel.revalidate();
+            panel.repaint();
         }
 
         public @Nullable JComponent getContent() {
             // Create stats table
-            String[] columnNames = {"Date", "Test Executions", "Successful", "Failed", "Avg Duration (ms)"};
-            DefaultTableModel model = new DefaultTableModel(columnNames, 0);
 
             TestMetricsService.State state = service.getState();
 
-            // Sort dates in reverse order (newest first)
-            List<String> dates = new ArrayList<>(state.dailyStats.keySet());
-            dates.sort((a, b) -> b.compareTo(a));
-
-            for (String date : dates) {
-                TestMetricsService.DailyStats stats = state.dailyStats.get(date);
-                if (stats != null) {
-                    long avgDuration = stats.testExecutions > 0 ? stats.totalDuration / stats.testExecutions : 0;
-                    model.addRow(new Object[]{
-                            formatDate(date),
-                            stats.testExecutions,
-                            stats.successfulTests,
-                            stats.failedTests,
-                            avgDuration
-                    });
-                }
-            }
+            var model = generateMetricsTableModel(state);
 
             // Calculate weekly stats
             int weeklyExecutions = 0;
@@ -81,7 +91,7 @@ public class DXToolWindowFactory implements ToolWindowFactory {
                 }
             }
 
-            var panel = new JBPanel<>();
+            this.panel = new JBPanel<>();
             panel.setLayout(new BorderLayout());
 
             // Weekly summary at top
@@ -95,15 +105,37 @@ public class DXToolWindowFactory implements ToolWindowFactory {
             panel.add(summaryPanel, BorderLayout.NORTH);
 
             // Table in center
-            JTable table = new JTable(model);
-            table.setFillsViewportHeight(true);
-            JScrollPane scrollPane = new JScrollPane(table);
+            metricsTable = new JTable(model);
+            metricsTable.setFillsViewportHeight(true);
+            JScrollPane scrollPane = new JScrollPane(metricsTable);
             panel.add(scrollPane, BorderLayout.CENTER);
 
             // Note at bottom
-            JLabel noteLabel = new JLabel("Note: Stats are tracked per IDE session and persist across restarts.");
-            panel.add(noteLabel, BorderLayout.SOUTH);
+            this.statsLabel = new JLabel("Note: Stats are tracked per IDE session and persist across restarts.");
+            panel.add(this.statsLabel, BorderLayout.SOUTH);
             return panel;
+        }
+
+        private TableModel generateMetricsTableModel(TestMetricsService.State state) {
+            // Sort dates in reverse order (newest first)
+            List<String> dates = new ArrayList<>(state.dailyStats.keySet());
+            dates.sort((a, b) -> b.compareTo(a));
+            String[] columnNames = {"Date", "Test Executions", "Successful", "Failed", "Avg Duration (ms)"};
+            var model = new DefaultTableModel(columnNames, 0);
+            for (String date : dates) {
+                TestMetricsService.DailyStats stats = state.dailyStats.get(date);
+                if (stats != null) {
+                    long avgDuration = stats.testExecutions > 0 ? stats.totalDuration / stats.testExecutions : 0;
+                    model.addRow(new Object[]{
+                            formatDate(date),
+                            stats.testExecutions,
+                            stats.successfulTests,
+                            stats.failedTests,
+                            avgDuration
+                    });
+                }
+            }
+            return model;
         }
     }
     @Override

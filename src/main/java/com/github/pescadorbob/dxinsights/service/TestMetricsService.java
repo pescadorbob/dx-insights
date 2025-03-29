@@ -1,5 +1,6 @@
 package com.github.pescadorbob.dxinsights.service;
 
+import com.github.pescadorbob.dxinsights.toolwindow.TestMetricsChangedListener;
 import com.intellij.execution.ExecutionListener;
 import com.intellij.execution.ExecutionManager;
 import com.intellij.execution.configurations.RunProfile;
@@ -91,6 +92,7 @@ public final class TestMetricsService implements PersistentStateComponent<TestMe
                     state.dailyStats.put(today, new DailyStats());
                 }
                 state.dailyStats.get(today).testExecutions++;
+                publishMetricsUpdated();
             }
         }
 
@@ -113,6 +115,7 @@ public final class TestMetricsService implements PersistentStateComponent<TestMe
                     stats.totalDuration += duration;
                     stats.successfulTests += (exitCode == 0 ? 1 : 0);
                     stats.failedTests += (exitCode != 0 ? 1 : 0);
+                    publishMetricsUpdated();
                 }
 
             }
@@ -143,5 +146,8 @@ public final class TestMetricsService implements PersistentStateComponent<TestMe
                 return "unknown-host";
             }
         }
+    }
+    private void publishMetricsUpdated() {
+        project.getMessageBus().syncPublisher(TestMetricsChangedListener.TEST_METRICS_CHANGED_TOPIC).testMetricsChanged();
     }
 }
