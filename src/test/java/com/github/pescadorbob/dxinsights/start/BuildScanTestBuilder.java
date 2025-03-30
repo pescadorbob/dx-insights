@@ -1,5 +1,6 @@
 package com.github.pescadorbob.dxinsights.start;
 
+import com.github.pescadorbob.dxinsights.domain.BuildScan;
 import com.github.pescadorbob.dxinsights.scan.start.BuildId;
 
 import java.time.Duration;

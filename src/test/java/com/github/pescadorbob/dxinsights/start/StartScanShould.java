@@ -1,6 +1,7 @@
 package com.github.pescadorbob.dxinsights.start;
 
 
+import com.github.pescadorbob.dxinsights.domain.BuildScan;
 import com.github.pescadorbob.dxinsights.scan.start.BuildId;
 import com.github.pescadorbob.dxinsights.scan.start.ForNotifyingUI;
 import com.github.pescadorbob.dxinsights.scan.start.ForStoringScans;
@@ -53,7 +54,7 @@ class StartScanShould {
 
 
     private static class FakeScanRepository implements ForStoringScans {
-        public Map<BuildId,BuildScan> buildScans;
+        public Map<BuildId, BuildScan> buildScans;
 
         public FakeScanRepository(){
             buildScans = new HashMap<>();

@@ -1,7 +1,7 @@
 package com.github.pescadorbob.dxinsights.scan.start;
 
 import com.github.pescadorbob.dxinsights.domain.guards.ForGeneratingBuildIds;
-import com.github.pescadorbob.dxinsights.start.BuildScan;
+import com.github.pescadorbob.dxinsights.domain.BuildScan;
 import com.github.pescadorbob.dxinsights.start.BuildScanStatus;
 
 import java.time.Clock;
