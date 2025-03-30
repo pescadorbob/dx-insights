@@ -33,7 +33,6 @@ public final class DXInsightService implements PersistentStateComponent<DXInsigh
     @Getter
     private State state;
     private final Map<String, Long> testStartTimes = new HashMap<>();
-    private final Map<String, ExecutionEnvironment> activeRuns = new HashMap<>();
 
     public DXInsightService(Project project) {
         this.project = project;
@@ -70,7 +69,6 @@ public final class DXInsightService implements PersistentStateComponent<DXInsigh
             if (isTestRun(env)) {
                 String runId = env.getExecutionId() + ":" + env.getExecutor().getId();
                 testStartTimes.put(runId, System.currentTimeMillis());
-                activeRuns.put(runId, env);
 
                 LOG.info("Test execution started: " + getTestName(env));
 
@@ -88,7 +86,6 @@ public final class DXInsightService implements PersistentStateComponent<DXInsigh
         public void processTerminated(@NotNull String executorId, @NotNull ExecutionEnvironment env, @NotNull ProcessHandler handler, int exitCode) {
             String runId = env.getExecutionId() + ":" + env.getExecutor().getId();
             Long startTime = testStartTimes.remove(runId);
-            activeRuns.remove(runId);
 
             if (startTime != null) {
                 long duration = System.currentTimeMillis() - startTime;
@@ -111,7 +108,6 @@ public final class DXInsightService implements PersistentStateComponent<DXInsigh
 
         private boolean isTestRun(ExecutionEnvironment env) {
             RunProfile profile = env.getRunProfile();
-            if (profile == null) return false;
 
             String profileName = profile.toString().toLowerCase();
             return profileName.contains("junit") ||
@@ -122,7 +118,6 @@ public final class DXInsightService implements PersistentStateComponent<DXInsigh
 
         private String getTestName(ExecutionEnvironment env) {
             RunProfile profile = env.getRunProfile();
-            if (profile == null) return "unknown";
 
             return profile.getName();
         }
