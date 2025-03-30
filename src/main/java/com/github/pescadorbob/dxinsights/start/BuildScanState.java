@@ -2,12 +2,14 @@ package com.github.pescadorbob.dxinsights.start;
 
 import com.github.pescadorbob.dxinsights.domain.BuildScan;
 import com.github.pescadorbob.dxinsights.scan.start.BuildId;
+import lombok.Data;
 
-import java.util.HashMap;
 import java.util.Map;
 
+@Data
 public class BuildScanState {
-    public Map<BuildId, BuildScan> scans = new HashMap<>();
+    Map<BuildId, BuildScan> scans;
+    Map<String, DailyStats> stats;
 
     public void addBuildScan(BuildScan buildScan) {
         scans.put(buildScan.getBuildId(), buildScan);

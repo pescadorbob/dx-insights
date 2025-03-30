@@ -13,6 +13,7 @@ public class StartScanTestBuilder {
     private ForStoringScans scanRepository;
     private ForGeneratingBuildIds buildIdGenerator;
     private ForNotifyingUI forNotifyingUI;
+    private ForStoringStats forStoringStats;
 
     public static  StartScanTestBuilder aStartScan() {
         return new StartScanTestBuilder();
@@ -34,7 +35,7 @@ public class StartScanTestBuilder {
     }
 
     public StartScan build() {
-        return new StartScan(clock,scanRepository,buildIdGenerator, forNotifyingUI);
+        return new StartScan(clock,scanRepository,buildIdGenerator, forNotifyingUI,forStoringStats);
     }
 
     public StartScanTestBuilder withScanRepository(ForStoringScans scanRepository) {
@@ -53,4 +54,8 @@ public class StartScanTestBuilder {
     }
 
 
+    public StartScanTestBuilder withStatsRepository(ForStoringStats forStoringStats) {
+        this.forStoringStats = forStoringStats;
+        return this;
+    }
 }

@@ -6,8 +6,11 @@ import com.github.pescadorbob.dxinsights.scan.start.BuildId;
 import com.github.pescadorbob.dxinsights.scan.start.ForNotifyingUI;
 import org.junit.jupiter.api.Test;
 
+import java.time.LocalDate;
+
 import static com.github.pescadorbob.dxinsights.start.BuildScanStatus.IN_PROGRESS;
 import static com.github.pescadorbob.dxinsights.start.BuildScanTestBuilder.aBuildScan;
+import static com.github.pescadorbob.dxinsights.start.DailyStatsTestBuilder.aDailyStats;
 import static com.github.pescadorbob.dxinsights.start.StartScanResultTestBuilder.aStartScanResult;
 import static com.github.pescadorbob.dxinsights.start.StartScanTestBuilder.aStartScan;
 import static com.github.pescadorbob.dxinsights.start.StartScanTestBuilder.clockAtTime;
@@ -16,7 +19,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 class StartScanShould {
 
     @Test
-    void startABuildScan_givenAConfiguration_AndBuildScan(){
+    void startABuildScan_givenAConfiguration_AndBuildScan() {
+        var statsRepository = new FakeStatsRepository();
         var scanRepository = new FakeScanRepository();
         var fakeUi = new FakeUi();
         var fakeGenerator = new FakeIdGenerator();
@@ -26,6 +30,7 @@ class StartScanShould {
         var useCase = aStartScan()
                 .withClock(clock)
                 .withScanRepository(scanRepository)
+                .withStatsRepository(statsRepository)
                 .withScanUI(fakeUi)
                 .withBuildIdGenerator(buildIdGenerator)
                 .build();
@@ -36,6 +41,10 @@ class StartScanShould {
                 .withNoDuration()
                 .withBuildScanStatus(IN_PROGRESS)
                 .build();
+        var expectedDailyStats = aDailyStats()
+                .withTestExecutions(1)
+                .build();
+
 
         var actualResult = useCase.execute();
 
@@ -44,6 +53,7 @@ class StartScanShould {
         assertThat(scanRepository.getBuild(new BuildId("1")))
                 .usingRecursiveComparison()
                 .isEqualTo(expectedBuildScan);
+        assertThat(statsRepository.getDailyStats(LocalDate.parse("2025-03-29"))).isEqualTo(expectedDailyStats);
     }
 
 
