@@ -41,12 +41,14 @@ public class StartScan {
 
     private void updateExecutionsStats() {
         var today = LocalDate.ofInstant(clock.instant(),clock.getZone());
+        DailyStats dailyStats;
         if(statsRepository.getDailyStats(today) == null){
-            statsRepository.save(today,new DailyStats());
+            dailyStats = new DailyStats();
+        } else {
+            dailyStats = statsRepository.getDailyStats(today);
         }
-        var dailyStats = statsRepository.getDailyStats(today);
         dailyStats.setTestExecutions(dailyStats.getTestExecutions()+1);
-
+        statsRepository.save(today,dailyStats);
     }
 
     public static ZonedDateTime getZonedDateTimeFromClock(Clock clock) {
