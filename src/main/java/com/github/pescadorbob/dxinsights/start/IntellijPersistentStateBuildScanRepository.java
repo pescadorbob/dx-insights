@@ -9,9 +9,11 @@ import com.intellij.openapi.components.Storage;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.time.LocalDate;
+
 @State(name = "BuildScanState",
         storages = {@Storage("build-scans.xml")})
-public class IntellijPersistentStateBuildScanRepository implements ForStoringScans, PersistentStateComponent<BuildScanState> {
+public class IntellijPersistentStateBuildScanRepository implements ForStoringScans, PersistentStateComponent<BuildScanState>, ForStoringStats {
 
     private BuildScanState state;
 
@@ -38,5 +40,15 @@ public class IntellijPersistentStateBuildScanRepository implements ForStoringSca
     @Override
     public void loadState(@NotNull BuildScanState buildScanState) {
         this.state = buildScanState;
+    }
+
+    @Override
+    public DailyStats getDailyStats(LocalDate date) {
+        return state.getStats(date);
+    }
+
+    @Override
+    public void save(LocalDate today, DailyStats dailyStats) {
+        state.saveStat(today,dailyStats);
     }
 }

@@ -3,6 +3,7 @@ package com.github.pescadorbob.dxinsights.start;
 import com.github.pescadorbob.dxinsights.domain.BuildScan;
 import com.github.pescadorbob.dxinsights.scan.start.BuildId;
 
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -27,8 +28,8 @@ public class BuildScanStateTestBuilder {
     }
     public BuildScanState build(){
         var state = new BuildScanState();
-        state.setScans(scans);
-        state.setStats(dailyStats);
+        scans.forEach((key, value) -> state.addBuildScan(value));
+        dailyStats.forEach((key, value) -> state.saveStat(LocalDate.parse(key),value));
         return state;
     }
 }

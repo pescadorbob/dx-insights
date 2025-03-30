@@ -4,13 +4,14 @@ import com.github.pescadorbob.dxinsights.domain.BuildScan;
 import com.github.pescadorbob.dxinsights.scan.start.BuildId;
 import lombok.Data;
 
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
 
-@Data
 public class BuildScanState {
-    Map<BuildId, BuildScan> scans;
-    Map<String, DailyStats> stats;
+    private final Map<BuildId, BuildScan> scans;
+    private final Map<LocalDate, DailyStats> stats;
+
     public BuildScanState() {
         scans = new HashMap<>();
         stats = new HashMap<>();
@@ -23,5 +24,13 @@ public class BuildScanState {
 
     public BuildScan getBuildScan(BuildId buildId) {
         return scans.get(buildId);
+    }
+
+    public DailyStats getStats(LocalDate date) {
+        return stats.get(date);
+    }
+
+    public void saveStat(LocalDate today, DailyStats dailyStats) {
+        stats.put(today,dailyStats);
     }
 }

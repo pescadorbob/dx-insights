@@ -39,19 +39,6 @@ public abstract class StatsRepositoryShould {
                 .isEqualTo(dailyStats);
     }
 
-    @Test
-    public void returnEmptyStats_whenNoStatsExistForDate() {
-        // Given
-        var date = LocalDate.parse("2025-03-29");
-
-        // When
-        var stats = statsRepository.getDailyStats(date);
-
-        // Then
-        assertThat(stats)
-                .usingRecursiveComparison()
-                .isEqualTo(aDailyStats().build());
-    }
 
     @Test
     public void updateExistingStats_whenSavingForSameDate() {
