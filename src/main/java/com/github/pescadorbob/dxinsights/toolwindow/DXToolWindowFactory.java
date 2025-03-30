@@ -18,6 +18,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class DXToolWindowFactory implements ToolWindowFactory {
 
@@ -55,7 +56,7 @@ public class DXToolWindowFactory implements ToolWindowFactory {
             DXInsightService service = project.getService(DXInsightService.class);
             DXInsightService.State state = service.getState();
 
-            var model = generateMetricsTableModel(state);
+            var model = generateMetricsTableModel(Objects.requireNonNull(state));
             metricsTable.setModel(model);
             panel.revalidate();
             panel.repaint();
@@ -66,7 +67,7 @@ public class DXToolWindowFactory implements ToolWindowFactory {
 
             DXInsightService.State state = service.getState();
 
-            var model = generateMetricsTableModel(state);
+            var model = generateMetricsTableModel(Objects.requireNonNull(state));
 
             // Calculate weekly stats
             int weeklyExecutions = 0;
@@ -98,6 +99,8 @@ public class DXToolWindowFactory implements ToolWindowFactory {
             summaryPanel.add(new JLabel("Last 7 days: " + weeklyExecutions + " test executions"));
             summaryPanel.add(new JLabel("Success rate: " +
                     (weeklyExecutions > 0 ? (weeklySuccessful * 100 / weeklyExecutions) + "%" : "N/A")));
+            summaryPanel.add(new JLabel("Failure rate: " +
+                    (weeklyExecutions > 0 ? (weeklyFailed * 100 / weeklyExecutions) + "%" : "N/A")));
             summaryPanel.add(new JLabel("Avg duration: " +
                     (weeklyExecutions > 0 ? (weeklyDuration / weeklyExecutions) + " ms" : "N/A")));
 
