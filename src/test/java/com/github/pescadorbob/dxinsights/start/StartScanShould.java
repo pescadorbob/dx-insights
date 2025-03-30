@@ -4,12 +4,7 @@ package com.github.pescadorbob.dxinsights.start;
 import com.github.pescadorbob.dxinsights.domain.BuildScan;
 import com.github.pescadorbob.dxinsights.scan.start.BuildId;
 import com.github.pescadorbob.dxinsights.scan.start.ForNotifyingUI;
-import com.github.pescadorbob.dxinsights.scan.start.ForStoringScans;
 import org.junit.jupiter.api.Test;
-
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
 
 import static com.github.pescadorbob.dxinsights.start.BuildScanStatus.IN_PROGRESS;
 import static com.github.pescadorbob.dxinsights.start.BuildScanTestBuilder.aBuildScan;
@@ -51,27 +46,6 @@ class StartScanShould {
                 .isEqualTo(expectedBuildScan);
     }
 
-
-
-    private static class FakeScanRepository implements ForStoringScans {
-        public Map<BuildId, BuildScan> buildScans;
-
-        public FakeScanRepository(){
-            buildScans = new HashMap<>();
-        }
-        @Override
-        public BuildScan getBuild(BuildId id) {
-            var buildScan = buildScans.get(id);
-            Objects.requireNonNull(buildScan,"Build scan not found");
-
-            return buildScan.toBuilder().build();
-        }
-
-        @Override
-        public void save(BuildScan buildScan) {
-            buildScans.put(buildScan.getBuildId(),buildScan);
-        }
-    }
 
     private static class FakeUi implements ForNotifyingUI {
         private boolean isNotified = false;

@@ -1,5 +1,7 @@
 package com.github.pescadorbob.dxinsights.service;
 
+import com.github.pescadorbob.dxinsights.scan.start.ForStoringScans;
+import com.github.pescadorbob.dxinsights.scan.start.StartScan;
 import com.github.pescadorbob.dxinsights.toolwindow.TestMetricsChangedListener;
 import com.intellij.execution.ExecutionListener;
 import com.intellij.execution.ExecutionManager;
@@ -17,6 +19,7 @@ import lombok.Getter;
 import org.jetbrains.annotations.NotNull;
 
 import java.net.InetAddress;
+import java.time.Clock;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;

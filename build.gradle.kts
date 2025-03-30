@@ -167,3 +167,6 @@ intellijPlatformTesting {
         }
     }
 }
+configurations.all {
+    exclude(group = "junit", module = "junit")  // Excludes JUnit 4
+}
