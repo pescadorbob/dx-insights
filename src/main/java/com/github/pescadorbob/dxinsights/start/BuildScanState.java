@@ -2,7 +2,6 @@ package com.github.pescadorbob.dxinsights.start;
 
 import com.github.pescadorbob.dxinsights.domain.BuildScan;
 import com.github.pescadorbob.dxinsights.scan.start.BuildId;
-import lombok.Data;
 
 import java.time.LocalDate;
 import java.util.HashMap;

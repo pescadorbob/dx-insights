@@ -1,5 +1,7 @@
 package com.github.pescadorbob.dxinsights.service;
 
+import com.github.pescadorbob.dxinsights.domain.BuildScan;
+import com.github.pescadorbob.dxinsights.scan.start.ForNotifyingUI;
 import com.github.pescadorbob.dxinsights.scan.start.ForStoringScans;
 import com.github.pescadorbob.dxinsights.scan.start.StartScan;
 import com.github.pescadorbob.dxinsights.toolwindow.TestMetricsChangedListener;
@@ -30,16 +32,19 @@ import java.util.Map;
         name = "TestMetricsService",
         storages = {@Storage("text-execution-metrics.xml")}
 )
-public final class DXInsightService implements PersistentStateComponent<DXInsightService.State> {
+public final class DXInsightService implements PersistentStateComponent<DXInsightService.State>, ForNotifyingUI {
     private static final Logger LOG = Logger.getInstance(DXInsightService.class);
     private final Project project;
     @Getter
     private State state;
     private final Map<String, Long> testStartTimes = new HashMap<>();
+    private final StartScan startScan;
 
     public DXInsightService(Project project) {
         this.project = project;
         this.state = new State();
+        var config = new DXInsightServiceConfiguration(this);
+        this.startScan = config.getStartScan();
     }
 
     @Override
@@ -52,6 +57,11 @@ public final class DXInsightService implements PersistentStateComponent<DXInsigh
         MessageBusConnection messageBus = project.getMessageBus().connect();
         messageBus.subscribe(ExecutionManager.EXECUTION_TOPIC, new TestExecutionListener());
         LOG.info("Test Iteration Tracker initialized for project: " + project.getName());
+    }
+
+    @Override
+    public void notifyUpdated(BuildScan buildScan) {
+        publishMetricsUpdated();
     }
 
     public static class State {
