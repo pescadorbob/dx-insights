@@ -12,9 +12,9 @@ public class DXInsightServiceConfiguration {
     private final IntellijPersistentStateBuildScanRepository intellijPersistentStateBuildScanRepository;
     private final DXInsightService dxInsightService;
 
-    public DXInsightServiceConfiguration(DXInsightService dxInsightService) {
+    public DXInsightServiceConfiguration(DXInsightService dxInsightService, IntellijPersistentStateBuildScanRepository repository) {
         this.dxInsightService = dxInsightService;
-        intellijPersistentStateBuildScanRepository = new IntellijPersistentStateBuildScanRepository();
+        intellijPersistentStateBuildScanRepository = repository;
     }
     public Clock getClock() {
         return Clock.systemDefaultZone();

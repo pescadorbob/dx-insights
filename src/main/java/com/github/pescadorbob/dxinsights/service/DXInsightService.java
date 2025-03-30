@@ -2,8 +2,8 @@ package com.github.pescadorbob.dxinsights.service;
 
 import com.github.pescadorbob.dxinsights.domain.BuildScan;
 import com.github.pescadorbob.dxinsights.scan.start.ForNotifyingUI;
-import com.github.pescadorbob.dxinsights.scan.start.ForStoringScans;
 import com.github.pescadorbob.dxinsights.scan.start.StartScan;
+import com.github.pescadorbob.dxinsights.start.IntellijPersistentStateBuildScanRepository;
 import com.github.pescadorbob.dxinsights.toolwindow.TestMetricsChangedListener;
 import com.intellij.execution.ExecutionListener;
 import com.intellij.execution.ExecutionManager;
@@ -21,7 +21,6 @@ import lombok.Getter;
 import org.jetbrains.annotations.NotNull;
 
 import java.net.InetAddress;
-import java.time.Clock;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
@@ -43,7 +42,8 @@ public final class DXInsightService implements PersistentStateComponent<DXInsigh
     public DXInsightService(Project project) {
         this.project = project;
         this.state = new State();
-        var config = new DXInsightServiceConfiguration(this);
+        IntellijPersistentStateBuildScanRepository stateRepository = project.getService(IntellijPersistentStateBuildScanRepository.class);
+        var config = new DXInsightServiceConfiguration(this, stateRepository);
         this.startScan = config.getStartScan();
     }
 
