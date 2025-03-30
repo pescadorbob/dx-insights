@@ -1,6 +1,6 @@
 package com.github.pescadorbob.dxinsights.toolwindow;
 
-import com.github.pescadorbob.dxinsights.service.TestMetricsService;
+import com.github.pescadorbob.dxinsights.service.DXInsightService;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.wm.ToolWindow;
 import com.intellij.openapi.wm.ToolWindowFactory;
@@ -30,16 +30,15 @@ public class DXToolWindowFactory implements ToolWindowFactory {
 
     class DXToolWindow {
         private final Project project;
-        private final TestMetricsService service;
+        private final DXInsightService service;
         private JBPanel<JBPanel<?>> panel;
-        private JLabel statsLabel;
 
         JTable metricsTable;
 
 
         DXToolWindow(Project project, ToolWindow toolWindow){
             this.project = project;
-            service = toolWindow.getProject().getService(TestMetricsService.class);
+            service = toolWindow.getProject().getService(DXInsightService.class);
             subscribeToMetricsUpdates();
         }
         private void subscribeToMetricsUpdates() {
@@ -53,8 +52,8 @@ public class DXToolWindowFactory implements ToolWindowFactory {
             });
         }
         private void updateStats() {
-            TestMetricsService service = project.getService(TestMetricsService.class);
-            TestMetricsService.State state = service.getState();
+            DXInsightService service = project.getService(DXInsightService.class);
+            DXInsightService.State state = service.getState();
 
             var model = generateMetricsTableModel(state);
             metricsTable.setModel(model);
@@ -65,7 +64,7 @@ public class DXToolWindowFactory implements ToolWindowFactory {
         public @Nullable JComponent getContent() {
             // Create stats table
 
-            TestMetricsService.State state = service.getState();
+            DXInsightService.State state = service.getState();
 
             var model = generateMetricsTableModel(state);
 
@@ -82,7 +81,7 @@ public class DXToolWindowFactory implements ToolWindowFactory {
                 LocalDate date = today.minusDays(i);
                 String dateStr = date.format(formatter);
 
-                TestMetricsService.DailyStats stats = state.dailyStats.get(dateStr);
+                DXInsightService.DailyStats stats = state.dailyStats.get(dateStr);
                 if (stats != null) {
                     weeklyExecutions += stats.testExecutions;
                     weeklySuccessful += stats.successfulTests;
@@ -111,19 +110,19 @@ public class DXToolWindowFactory implements ToolWindowFactory {
             panel.add(scrollPane, BorderLayout.CENTER);
 
             // Note at bottom
-            this.statsLabel = new JLabel("Note: Stats are tracked per IDE session and persist across restarts.");
-            panel.add(this.statsLabel, BorderLayout.SOUTH);
+            JLabel statsLabel = new JLabel("Note: Stats are tracked per IDE session and persist across restarts.");
+            panel.add(statsLabel, BorderLayout.SOUTH);
             return panel;
         }
 
-        private TableModel generateMetricsTableModel(TestMetricsService.State state) {
+        private TableModel generateMetricsTableModel(DXInsightService.State state) {
             // Sort dates in reverse order (newest first)
             List<String> dates = new ArrayList<>(state.dailyStats.keySet());
             dates.sort((a, b) -> b.compareTo(a));
             String[] columnNames = {"Date", "Test Executions", "Successful", "Failed", "Avg Duration (ms)"};
             var model = new DefaultTableModel(columnNames, 0);
             for (String date : dates) {
-                TestMetricsService.DailyStats stats = state.dailyStats.get(date);
+                DXInsightService.DailyStats stats = state.dailyStats.get(date);
                 if (stats != null) {
                     long avgDuration = stats.testExecutions > 0 ? stats.totalDuration / stats.testExecutions : 0;
                     model.addRow(new Object[]{

@@ -12,40 +12,32 @@ import com.intellij.openapi.components.State;
 import com.intellij.openapi.components.Storage;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.startup.ProjectActivity;
 import com.intellij.util.messages.MessageBusConnection;
-import kotlin.Unit;
-import kotlin.coroutines.Continuation;
+import lombok.Getter;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.net.InetAddress;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
 
 @Service(Service.Level.PROJECT)
 @State(
         name = "TestMetricsService",
         storages = {@Storage("text-execution-metrics.xml")}
 )
-public final class TestMetricsService implements PersistentStateComponent<TestMetricsService.State> {
-    private static final Logger LOG = Logger.getInstance(TestMetricsService.class);
+public final class DXInsightService implements PersistentStateComponent<DXInsightService.State> {
+    private static final Logger LOG = Logger.getInstance(DXInsightService.class);
     private final Project project;
+    @Getter
     private State state;
     private final Map<String, Long> testStartTimes = new HashMap<>();
     private final Map<String, ExecutionEnvironment> activeRuns = new HashMap<>();
-    private MessageBusConnection messageBus;
 
-    public TestMetricsService(Project project) {
+    public DXInsightService(Project project) {
         this.project = project;
         this.state = new State();
-    }
-
-    public State getState() {
-        return state;
     }
 
     @Override
@@ -55,8 +47,8 @@ public final class TestMetricsService implements PersistentStateComponent<TestMe
 
     public void initialize() {
         // Same code that was in runActivity
-        messageBus = project.getMessageBus().connect();
-        messageBus.subscribe(ExecutionManager.EXECUTION_TOPIC, new TestExecutionListener(project));
+        MessageBusConnection messageBus = project.getMessageBus().connect();
+        messageBus.subscribe(ExecutionManager.EXECUTION_TOPIC, new TestExecutionListener());
         LOG.info("Test Iteration Tracker initialized for project: " + project.getName());
     }
 
@@ -71,11 +63,7 @@ public final class TestMetricsService implements PersistentStateComponent<TestMe
         public long totalDuration = 0;
     }
     private class TestExecutionListener implements ExecutionListener {
-        private final Project project;
 
-        public TestExecutionListener(Project project) {
-            this.project = project;
-        }
 
         @Override
         public void processStarted(@NotNull String executorId, @NotNull ExecutionEnvironment env, @NotNull ProcessHandler handler) {

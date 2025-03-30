@@ -43,6 +43,28 @@ To keep everything working, do not remove `<!-- ... -->` sections.
   Download the [latest release](https://github.com/pescadorbob/dx-insights/releases/latest) and install it manually using
   <kbd>Settings/Preferences</kbd> > <kbd>Plugins</kbd> > <kbd>⚙️</kbd> > <kbd>Install plugin from disk...</kbd>
 
+# Running Tests
+This plugin uses Hexagonal Architecture for testability and for more maintainable code. The test class names are written 
+with the convention `<SomeObject>Should` followed by the method name that describes what **should** happen **given** 
+certain conditions.
+
+This doesn't follow the default naming standards most folks are used too. From what Google Gemini tells me, it was Dan North and BDD
+but [Sandro Mancuso also had a good article and video on it](https://www.codurance.com/publications/2014/12/13/naming-test-classes-and-methods).
+
+Intellij will highlight the tests as not following convention. See below:
+
+![img.png](img.png)
+
+Update the test class naming conventions as follows:
+
+Navigate to: 
+
+**Settings > Editor > Inspections > Java > Naming Conventions > Class > Class naming convention > Options > Test Class**
+
+![img_1.png](img_1.png)
+
+Copy and paste this regular expression into the **Pattern** field:
+`[A-Z][A-Za-z\d]*Test(s|Case)?|Test[A-Z][A-Za-z\d]*|IT(.*)|(.*)IT(Case)?|[A-Z][A-Za-z\d]*Should`
 
 ---
 Plugin based on the [IntelliJ Platform Plugin Template][template].

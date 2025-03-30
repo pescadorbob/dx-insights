@@ -1,6 +1,6 @@
 package com.github.pescadorbob.dxinsights.startup;
 
-import com.github.pescadorbob.dxinsights.service.TestMetricsService;
+import com.github.pescadorbob.dxinsights.service.DXInsightService;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.startup.ProjectActivity;
@@ -15,7 +15,7 @@ public class TestMetricsStartupActivity implements ProjectActivity {
     @Override
     public @Nullable Object execute(@NotNull Project project, @NotNull Continuation<? super Unit> continuation) {
         LOG.info("Initializing test metrics service for project: " + project.getName() + " ...");
-        var service = project.getService(TestMetricsService.class);
+        var service = project.getService(DXInsightService.class);
         service.initialize();
         return null;
     }
