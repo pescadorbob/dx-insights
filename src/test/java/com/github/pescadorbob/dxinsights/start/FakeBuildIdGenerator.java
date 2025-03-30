@@ -1,9 +1,9 @@
 package com.github.pescadorbob.dxinsights.start;
 
-import com.github.pescadorbob.dxinsights.domain.guards.BuildIdGenerator;
+import com.github.pescadorbob.dxinsights.domain.guards.ForGeneratingBuildIds;
 import com.github.pescadorbob.dxinsights.scan.start.BuildId;
 
-public class FakeBuildIdGenerator implements BuildIdGenerator {
+public class FakeBuildIdGenerator implements ForGeneratingBuildIds {
     private final FakeIdGenerator fakeIdGenerator;
 
     public FakeBuildIdGenerator(FakeIdGenerator fakeIdGenerator) {

@@ -1,7 +1,7 @@
 package com.github.pescadorbob.dxinsights.start;
 
-import com.github.pescadorbob.dxinsights.domain.guards.BuildIdGenerator;
-import com.github.pescadorbob.dxinsights.scan.start.ScanRepository;
+import com.github.pescadorbob.dxinsights.domain.guards.ForGeneratingBuildIds;
+import com.github.pescadorbob.dxinsights.scan.start.ForStoringScans;
 import com.github.pescadorbob.dxinsights.scan.start.ForNotifyingUI;
 import com.github.pescadorbob.dxinsights.scan.start.StartScan;
 
@@ -10,8 +10,8 @@ import java.time.ZonedDateTime;
 
 public class StartScanTestBuilder {
     private Clock clock;
-    private ScanRepository scanRepository;
-    private BuildIdGenerator buildIdGenerator;
+    private ForStoringScans scanRepository;
+    private ForGeneratingBuildIds buildIdGenerator;
     private ForNotifyingUI forNotifyingUI;
 
     public static  StartScanTestBuilder aStartScan() {
@@ -37,7 +37,7 @@ public class StartScanTestBuilder {
         return new StartScan(clock,scanRepository,buildIdGenerator, forNotifyingUI);
     }
 
-    public StartScanTestBuilder withScanRepository(ScanRepository scanRepository) {
+    public StartScanTestBuilder withScanRepository(ForStoringScans scanRepository) {
         this.scanRepository = scanRepository;
         return this;
     }
@@ -47,7 +47,7 @@ public class StartScanTestBuilder {
         return this;
     }
 
-    public StartScanTestBuilder withBuildIdGenerator(BuildIdGenerator buildIdGenerator) {
+    public StartScanTestBuilder withBuildIdGenerator(ForGeneratingBuildIds buildIdGenerator) {
         this.buildIdGenerator = buildIdGenerator;
         return this;
     }

@@ -1,6 +1,6 @@
 package com.github.pescadorbob.dxinsights.scan.start;
 
-import com.github.pescadorbob.dxinsights.domain.guards.BuildIdGenerator;
+import com.github.pescadorbob.dxinsights.domain.guards.ForGeneratingBuildIds;
 import com.github.pescadorbob.dxinsights.start.BuildScan;
 import com.github.pescadorbob.dxinsights.start.BuildScanStatus;
 
@@ -11,10 +11,10 @@ import java.time.ZonedDateTime;
 
 public class StartScan {
     private final Clock clock;
-    private final ScanRepository scanRepository;
-    private final BuildIdGenerator buildIdGenerator;
+    private final ForStoringScans scanRepository;
+    private final ForGeneratingBuildIds buildIdGenerator;
     private final ForNotifyingUI forNotifyingUI;
-    public StartScan(Clock clock, ScanRepository scanRepository, BuildIdGenerator buildIdGenerator, ForNotifyingUI forNotifyingUI) {
+    public StartScan(Clock clock, ForStoringScans scanRepository, ForGeneratingBuildIds buildIdGenerator, ForNotifyingUI forNotifyingUI) {
         this.clock = clock;
         this.scanRepository = scanRepository;
         this.buildIdGenerator = buildIdGenerator;

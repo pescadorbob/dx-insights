@@ -3,7 +3,7 @@ package com.github.pescadorbob.dxinsights.start;
 
 import com.github.pescadorbob.dxinsights.scan.start.BuildId;
 import com.github.pescadorbob.dxinsights.scan.start.ForNotifyingUI;
-import com.github.pescadorbob.dxinsights.scan.start.ScanRepository;
+import com.github.pescadorbob.dxinsights.scan.start.ForStoringScans;
 import org.junit.jupiter.api.Test;
 
 import java.util.HashMap;
@@ -52,7 +52,7 @@ class StartScanShould {
 
 
 
-    private static class FakeScanRepository implements ScanRepository {
+    private static class FakeScanRepository implements ForStoringScans {
         public Map<BuildId,BuildScan> buildScans;
 
         public FakeScanRepository(){
