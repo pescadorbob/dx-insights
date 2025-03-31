@@ -48,7 +48,7 @@ public class IntellijPersistentStateBuildScanRepository implements ForStoringSca
     }
 
     @Override
-    public void save(LocalDate today, DailyStats dailyStats) {
-        state.saveStat(today,dailyStats);
+    public void save(DailyStats dailyStats) {
+        state.saveStat(dailyStats.getDate(),dailyStats);
     }
 }

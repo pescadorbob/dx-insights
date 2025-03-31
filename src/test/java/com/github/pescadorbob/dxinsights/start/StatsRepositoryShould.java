@@ -30,7 +30,7 @@ public abstract class StatsRepositoryShould {
                 .build();
 
         // When
-        statsRepository.save(date, dailyStats);
+        statsRepository.save( dailyStats);
         var actualStats = statsRepository.getDailyStats(date);
 
         // Then
@@ -48,7 +48,7 @@ public abstract class StatsRepositoryShould {
                 .withTestExecutions(5)
                 .withSuccessfulTests(3)
                 .build();
-        statsRepository.save(date, initialStats);
+        statsRepository.save( initialStats);
 
         var updatedStats = aDailyStats()
                 .withTestExecutions(7)
@@ -56,7 +56,7 @@ public abstract class StatsRepositoryShould {
                 .build();
 
         // When
-        statsRepository.save(date, updatedStats);
+        statsRepository.save( updatedStats);
         var actualStats = statsRepository.getDailyStats(date);
 
         // Then

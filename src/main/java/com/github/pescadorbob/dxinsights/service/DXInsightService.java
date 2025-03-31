@@ -80,6 +80,7 @@ public final class DXInsightService implements PersistentStateComponent<DXInsigh
         @Override
         public void processStarted(@NotNull String executorId, @NotNull ExecutionEnvironment env, @NotNull ProcessHandler handler) {
             if (isTestRun(env)) {
+                startScan.execute();
                 String runId = env.getExecutionId() + ":" + env.getExecutor().getId();
                 testStartTimes.put(runId, System.currentTimeMillis());
 

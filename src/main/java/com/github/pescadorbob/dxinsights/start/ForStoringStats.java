@@ -5,5 +5,5 @@ import java.time.LocalDate;
 public interface ForStoringStats {
     DailyStats getDailyStats(LocalDate date);
 
-    void save(LocalDate today, DailyStats dailyStats);
+    void save(DailyStats dailyStats);
 }

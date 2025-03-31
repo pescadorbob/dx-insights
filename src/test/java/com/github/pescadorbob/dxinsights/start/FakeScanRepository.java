@@ -8,7 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
-class FakeScanRepository implements ForStoringScans {
+public class FakeScanRepository implements ForStoringScans {
     public Map<BuildId, BuildScan> buildScans;
 
     public FakeScanRepository() {

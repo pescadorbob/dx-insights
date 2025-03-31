@@ -48,7 +48,8 @@ public class StartScan {
             dailyStats = statsRepository.getDailyStats(today);
         }
         dailyStats.setTestExecutions(dailyStats.getTestExecutions()+1);
-        statsRepository.save(today,dailyStats);
+        dailyStats.setDate(today);
+        statsRepository.save(dailyStats);
     }
 
     public static ZonedDateTime getZonedDateTimeFromClock(Clock clock) {

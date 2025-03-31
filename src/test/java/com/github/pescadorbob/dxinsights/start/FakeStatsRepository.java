@@ -23,7 +23,7 @@ public class FakeStatsRepository implements ForStoringStats {
     }
 
     @Override
-    public void save(LocalDate date, DailyStats dailyStats) {
-        stats.put(date,dailyStats);
+    public void save( DailyStats dailyStats) {
+        stats.put(dailyStats.getDate(),dailyStats);
     }
 }
