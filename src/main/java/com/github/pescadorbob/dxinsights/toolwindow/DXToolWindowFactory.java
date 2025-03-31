@@ -26,9 +26,32 @@ public class DXToolWindowFactory implements ToolWindowFactory {
 
     @Override
     public void createToolWindowContent(@NotNull Project project, @NotNull ToolWindow toolWindow) {
-        var dxToolWindow = new DXToolWindow(project, toolWindow );
-        var content = ContentFactory.getInstance().createContent(dxToolWindow.getContent(), null, false);
+        var dxToolWindow = new DXToolWindow(project, toolWindow);
+        var newDxToolWindow = new NewDXToolWindow(project, toolWindow);
+        var parentToolWindows = new ParentToolWindows(dxToolWindow, newDxToolWindow);
+        var content = ContentFactory.getInstance().createContent(parentToolWindows.getContent(), null, false);
         toolWindow.getContentManager().addContent(content);
+    }
+
+    class ParentToolWindows {
+        private final DXToolWindow dxToolWindow;
+        private final NewDXToolWindow newDxToolWindow;
+        private JBPanel<JBPanel<?>> mainPanel;
+
+        public ParentToolWindows(DXToolWindow dxToolWindow, NewDXToolWindow newDxToolWindow) {
+            this.dxToolWindow = dxToolWindow;
+            this.newDxToolWindow = newDxToolWindow;
+        }
+
+        public @Nullable JComponent getContent() {
+
+            this.mainPanel = new JBPanel<>();
+            mainPanel.setLayout(new BorderLayout());
+            mainPanel.add(dxToolWindow.getContent(), BorderLayout.WEST);
+            mainPanel.add(newDxToolWindow.getContent(), BorderLayout.EAST);
+            return mainPanel;
+        }
+
     }
 
     class DXToolWindow {
@@ -36,15 +59,16 @@ public class DXToolWindowFactory implements ToolWindowFactory {
         private final DXInsightService service;
         private JBPanel<JBPanel<?>> mainPanel;
 
+
         JTable existingMetricsTable;
-        JTable newMetricTable;
 
 
-        DXToolWindow(Project project, ToolWindow toolWindow){
+        DXToolWindow(Project project, ToolWindow toolWindow) {
             this.project = project;
             service = toolWindow.getProject().getService(DXInsightService.class);
             subscribeToMetricsUpdates();
         }
+
         private void subscribeToMetricsUpdates() {
             MessageBusConnection messageBus;
             messageBus = project.getMessageBus().connect();
@@ -55,14 +79,14 @@ public class DXToolWindowFactory implements ToolWindowFactory {
                 }
             });
         }
+
         private void updateStats() {
             DXInsightService service = project.getService(DXInsightService.class);
             DXInsightService.State state = service.getState();
 
             var model = generateMetricsTableModel(Objects.requireNonNull(state));
-            var newModel = generateMetricsTableModel(Objects.requireNonNull(state));
+
             existingMetricsTable.setModel(model);
-            newMetricTable.setModel(newModel);
             mainPanel.revalidate();
             mainPanel.repaint();
         }
@@ -73,7 +97,7 @@ public class DXToolWindowFactory implements ToolWindowFactory {
             DXInsightService.State state = service.getState();
 
             var model = generateMetricsTableModel(Objects.requireNonNull(state));
-            var newModel = generateMetricsTableModel(Objects.requireNonNull(state));
+
 
             // Calculate weekly stats
             int weeklyExecutions = 0;
@@ -99,32 +123,21 @@ public class DXToolWindowFactory implements ToolWindowFactory {
 
             this.mainPanel = new JBPanel<>();
             mainPanel.setLayout(new BorderLayout());
-            JBPanel<JBPanel<?>> existingPanel = new JBPanel<>();
-            existingPanel.setLayout(new BorderLayout());
-            JBPanel<JBPanel<?>> newPanel = new JBPanel<>();
-            newPanel.setLayout(new BorderLayout());
-            mainPanel.add(existingPanel, WEST);
-            mainPanel.add(newPanel,EAST);
 
             // Weekly summary at top
             JPanel summaryPanel = weeklySummary(weeklyExecutions, weeklySuccessful, weeklyFailed, weeklyDuration);
 
-            existingPanel.add(summaryPanel, NORTH);
-            // Weekly summary at top
-            JPanel newSummaryPanel = weeklySummary(weeklyExecutions, weeklySuccessful, weeklyFailed, weeklyDuration);
-
-            newPanel.add(newSummaryPanel, NORTH);
+            mainPanel.add(summaryPanel, NORTH);
 
             // Table in center
             existingMetricsTable = new JTable(model);
 
-            tableInCenter( existingPanel,existingMetricsTable);
-            newMetricTable = new JTable(newModel);
-            tableInCenter( newPanel, newMetricTable);
+            tableInCenter(mainPanel, existingMetricsTable);
+
 
             // Note at bottom
-            noteAtBottom(existingPanel);
-            noteAtBottom(newPanel);
+            noteAtBottom(mainPanel);
+
             return mainPanel;
         }
 
@@ -133,7 +146,7 @@ public class DXToolWindowFactory implements ToolWindowFactory {
             targetPanel.add(statsLabel, BorderLayout.SOUTH);
         }
 
-        private void tableInCenter( JBPanel<JBPanel<?>> targetPanel, JTable metricsTable) {
+        private void tableInCenter(JBPanel<JBPanel<?>> targetPanel, JTable metricsTable) {
 
             metricsTable.setFillsViewportHeight(true);
             JScrollPane scrollPane = new JScrollPane(metricsTable);
@@ -174,10 +187,142 @@ public class DXToolWindowFactory implements ToolWindowFactory {
             return model;
         }
     }
+
+    class NewDXToolWindow {
+        private final Project project;
+        private final DXInsightService service;
+        private JBPanel<JBPanel<?>> mainPanel;
+
+        JTable metricsTable;
+
+
+        NewDXToolWindow(Project project, ToolWindow toolWindow) {
+            this.project = project;
+            service = toolWindow.getProject().getService(DXInsightService.class);
+            subscribeToMetricsUpdates();
+        }
+
+        private void subscribeToMetricsUpdates() {
+            MessageBusConnection messageBus;
+            messageBus = project.getMessageBus().connect();
+            messageBus.subscribe(TestMetricsChangedListener.TEST_METRICS_CHANGED_TOPIC, new TestMetricsChangedListener() {
+                @Override
+                public void testMetricsChanged() {
+                    updateStats();
+                }
+            });
+        }
+
+        private void updateStats() {
+            DXInsightService service = project.getService(DXInsightService.class);
+            DXInsightService.State state = service.getState();
+
+            var model = generateMetricsTableModel(Objects.requireNonNull(state));
+
+            metricsTable.setModel(model);
+            mainPanel.revalidate();
+            mainPanel.repaint();
+        }
+
+        public @Nullable JComponent getContent() {
+            // Create stats table
+
+            DXInsightService.State state = service.getState();
+
+            var model = generateMetricsTableModel(Objects.requireNonNull(state));
+
+            // Calculate weekly stats
+            int weeklyExecutions = 0;
+            int weeklySuccessful = 0;
+            int weeklyFailed = 0;
+            long weeklyDuration = 0;
+
+            LocalDate today = LocalDate.now();
+            DateTimeFormatter formatter = DateTimeFormatter.ISO_LOCAL_DATE;
+
+            for (int i = 0; i < 7; i++) {
+                LocalDate date = today.minusDays(i);
+                String dateStr = date.format(formatter);
+
+                DXInsightService.DailyStats stats = state.dailyStats.get(dateStr);
+                if (stats != null) {
+                    weeklyExecutions += stats.testExecutions;
+                    weeklySuccessful += stats.successfulTests;
+                    weeklyFailed += stats.failedTests;
+                    weeklyDuration += stats.totalDuration;
+                }
+            }
+
+            mainPanel = new JBPanel<>();
+            mainPanel.setLayout(new BorderLayout());
+
+            // Weekly summary at top
+            JPanel summaryPanel = weeklySummary(weeklyExecutions, weeklySuccessful, weeklyFailed, weeklyDuration);
+
+            mainPanel.add(summaryPanel, NORTH);
+
+            // Table in center
+            metricsTable = new JTable(model);
+
+            tableInCenter(mainPanel, metricsTable);
+
+            // Note at bottom
+            noteAtBottom(mainPanel);
+            return mainPanel;
+        }
+
+        private void noteAtBottom(JBPanel<JBPanel<?>> targetPanel) {
+            JLabel statsLabel = new JLabel("Note: Stats are tracked per IDE session and persist across restarts.");
+            targetPanel.add(statsLabel, BorderLayout.SOUTH);
+        }
+
+        private void tableInCenter(JBPanel<JBPanel<?>> targetPanel, JTable metricsTable) {
+
+            metricsTable.setFillsViewportHeight(true);
+            JScrollPane scrollPane = new JScrollPane(metricsTable);
+            targetPanel.add(scrollPane, BorderLayout.CENTER);
+        }
+
+        private static @NotNull JPanel weeklySummary(int weeklyExecutions, int weeklySuccessful, int weeklyFailed, long weeklyDuration) {
+            JPanel summaryPanel = new JPanel(new GridLayout(1, 3));
+            summaryPanel.add(new JLabel("Last 7 days: " + weeklyExecutions + " test executions"));
+            summaryPanel.add(new JLabel("Success rate: " +
+                    (weeklyExecutions > 0 ? (weeklySuccessful * 100 / weeklyExecutions) + "%" : "N/A")));
+            summaryPanel.add(new JLabel("Failure rate: " +
+                    (weeklyExecutions > 0 ? (weeklyFailed * 100 / weeklyExecutions) + "%" : "N/A")));
+            summaryPanel.add(new JLabel("Avg duration: " +
+                    (weeklyExecutions > 0 ? (weeklyDuration / weeklyExecutions) + " ms" : "N/A")));
+            return summaryPanel;
+        }
+
+        private TableModel generateMetricsTableModel(DXInsightService.State state) {
+            // Sort dates in reverse order (newest first)
+            List<String> dates = new ArrayList<>(state.dailyStats.keySet());
+            dates.sort((a, b) -> b.compareTo(a));
+            String[] columnNames = {"Date", "Test Executions", "Successful", "Failed", "Avg Duration (ms)"};
+            var model = new DefaultTableModel(columnNames, 0);
+            for (String date : dates) {
+                DXInsightService.DailyStats stats = state.dailyStats.get(date);
+                if (stats != null) {
+                    long avgDuration = stats.testExecutions > 0 ? stats.totalDuration / stats.testExecutions : 0;
+                    model.addRow(new Object[]{
+                            formatDate(date),
+                            stats.testExecutions,
+                            stats.successfulTests,
+                            stats.failedTests,
+                            avgDuration
+                    });
+                }
+            }
+            return model;
+        }
+    }
+
     @Override
     public boolean shouldBeAvailable(@NotNull Project project) {
         return true;
     }
+
     private String formatDate(String isoDate) {
         try {
             LocalDate date = LocalDate.parse(isoDate);

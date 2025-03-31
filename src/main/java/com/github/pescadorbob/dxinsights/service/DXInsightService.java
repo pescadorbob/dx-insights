@@ -1,8 +1,12 @@
 package com.github.pescadorbob.dxinsights.service;
 
+import com.github.pescadorbob.dxinsights.browse.BrowseStats;
+import com.github.pescadorbob.dxinsights.browse.ForBrowsingStats;
+import com.github.pescadorbob.dxinsights.complete.CompleteScan;
 import com.github.pescadorbob.dxinsights.domain.BuildScan;
 import com.github.pescadorbob.dxinsights.scan.start.ForNotifyingUI;
 import com.github.pescadorbob.dxinsights.scan.start.StartScan;
+import com.github.pescadorbob.dxinsights.start.DailyStats;
 import com.github.pescadorbob.dxinsights.start.IntellijPersistentStateBuildScanRepository;
 import com.github.pescadorbob.dxinsights.toolwindow.TestMetricsChangedListener;
 import com.intellij.execution.ExecutionListener;
@@ -31,13 +35,16 @@ import java.util.Map;
         name = "TestMetricsService",
         storages = {@Storage("text-execution-metrics.xml")}
 )
-public final class DXInsightService implements PersistentStateComponent<DXInsightService.State>, ForNotifyingUI {
+public final class DXInsightService implements PersistentStateComponent<DXInsightService.State>, ForNotifyingUI , ForBrowsingStats {
     private static final Logger LOG = Logger.getInstance(DXInsightService.class);
     private final Project project;
     @Getter
     private State state;
     private final Map<String, Long> testStartTimes = new HashMap<>();
     private final StartScan startScan;
+    private final CompleteScan completeScan ;
+    private final BrowseStats browseStats;
+
 
     public DXInsightService(Project project) {
         this.project = project;
@@ -45,6 +52,9 @@ public final class DXInsightService implements PersistentStateComponent<DXInsigh
         IntellijPersistentStateBuildScanRepository stateRepository = project.getService(IntellijPersistentStateBuildScanRepository.class);
         var config = new DXInsightServiceConfiguration(this, stateRepository);
         this.startScan = config.getStartScan();
+        this.completeScan = config.getCompleteScan();
+        this.browseStats = config.getBrowseStats();
+        initialize();
     }
 
     @Override
@@ -61,6 +71,11 @@ public final class DXInsightService implements PersistentStateComponent<DXInsigh
 
     @Override
     public void notifyUpdated(BuildScan buildScan) {
+        publishMetricsUpdated();
+    }
+
+    @Override
+    public void updateUi(Map<LocalDate, com.github.pescadorbob.dxinsights.start.DailyStats> dailyStats) {
         publishMetricsUpdated();
     }
 

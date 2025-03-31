@@ -1,5 +1,8 @@
 package com.github.pescadorbob.dxinsights.service;
 
+import com.github.pescadorbob.dxinsights.browse.BrowseStats;
+import com.github.pescadorbob.dxinsights.browse.ForBrowsingStats;
+import com.github.pescadorbob.dxinsights.complete.CompleteScan;
 import com.github.pescadorbob.dxinsights.domain.guards.ForGeneratingBuildIds;
 import com.github.pescadorbob.dxinsights.scan.start.ForStoringScans;
 import com.github.pescadorbob.dxinsights.scan.start.StartScan;
@@ -35,4 +38,13 @@ public class DXInsightServiceConfiguration {
     public StartScan getStartScan() {
         return new StartScan(getClock(),getScanRepository(),getBuildIdGenerator(),dxInsightService,getStatsRepository());
     }
+
+    public CompleteScan getCompleteScan() {
+        return new CompleteScan(getClock(),getScanRepository(),getBuildIdGenerator(),dxInsightService,getStatsRepository());
+    }
+
+    public BrowseStats getBrowseStats() {
+        return new BrowseStats(dxInsightService,getStatsRepository());
+    }
+
 }
