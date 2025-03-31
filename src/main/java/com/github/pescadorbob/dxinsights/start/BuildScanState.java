@@ -32,4 +32,8 @@ public class BuildScanState {
     public void saveStat(LocalDate today, DailyStats dailyStats) {
         stats.put(today,dailyStats);
     }
+
+    public Map<LocalDate, DailyStats> allStats() {
+        return stats;
+    }
 }

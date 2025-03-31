@@ -10,6 +10,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.time.LocalDate;
+import java.util.Map;
 
 @State(name = "BuildScanState",
         storages = {@Storage("build-scans.xml")})
@@ -50,5 +51,10 @@ public class IntellijPersistentStateBuildScanRepository implements ForStoringSca
     @Override
     public void save(DailyStats dailyStats) {
         state.saveStat(dailyStats.getDate(),dailyStats);
+    }
+
+    @Override
+    public Map<LocalDate, DailyStats> list() {
+        return state.allStats();
     }
 }

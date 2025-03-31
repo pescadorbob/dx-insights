@@ -26,4 +26,9 @@ public class FakeStatsRepository implements ForStoringStats {
     public void save( DailyStats dailyStats) {
         stats.put(dailyStats.getDate(),dailyStats);
     }
+
+    @Override
+    public Map<LocalDate, DailyStats> list() {
+        return stats;
+    }
 }

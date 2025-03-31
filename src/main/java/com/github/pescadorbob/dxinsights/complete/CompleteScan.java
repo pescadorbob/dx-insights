@@ -47,7 +47,6 @@ public class CompleteScan {
             dailyStats = statsRepository.getDailyStats(today);
         }
         dailyStats.setSuccessfulTests(dailyStats.getSuccessfulTests()+1);
-//        this.duration = Duration.between(startDateTime.toInstant(), instant);
 
         dailyStats.setTotalDuration(Duration.between(buildScan.getStartDateTime().toInstant(),clock.instant()).toMillis());
         dailyStats.setDate(today);
