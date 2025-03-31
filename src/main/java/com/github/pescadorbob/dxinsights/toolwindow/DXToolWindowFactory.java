@@ -20,6 +20,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import static java.awt.BorderLayout.*;
+
 public class DXToolWindowFactory implements ToolWindowFactory {
 
     @Override
@@ -32,9 +34,10 @@ public class DXToolWindowFactory implements ToolWindowFactory {
     class DXToolWindow {
         private final Project project;
         private final DXInsightService service;
-        private JBPanel<JBPanel<?>> panel;
+        private JBPanel<JBPanel<?>> mainPanel;
 
-        JTable metricsTable;
+        JTable existingMetricsTable;
+        JTable newMetricTable;
 
 
         DXToolWindow(Project project, ToolWindow toolWindow){
@@ -57,9 +60,11 @@ public class DXToolWindowFactory implements ToolWindowFactory {
             DXInsightService.State state = service.getState();
 
             var model = generateMetricsTableModel(Objects.requireNonNull(state));
-            metricsTable.setModel(model);
-            panel.revalidate();
-            panel.repaint();
+            var newModel = generateMetricsTableModel(Objects.requireNonNull(state));
+            existingMetricsTable.setModel(model);
+            newMetricTable.setModel(newModel);
+            mainPanel.revalidate();
+            mainPanel.repaint();
         }
 
         public @Nullable JComponent getContent() {
@@ -68,6 +73,7 @@ public class DXToolWindowFactory implements ToolWindowFactory {
             DXInsightService.State state = service.getState();
 
             var model = generateMetricsTableModel(Objects.requireNonNull(state));
+            var newModel = generateMetricsTableModel(Objects.requireNonNull(state));
 
             // Calculate weekly stats
             int weeklyExecutions = 0;
@@ -91,10 +97,50 @@ public class DXToolWindowFactory implements ToolWindowFactory {
                 }
             }
 
-            this.panel = new JBPanel<>();
-            panel.setLayout(new BorderLayout());
+            this.mainPanel = new JBPanel<>();
+            mainPanel.setLayout(new BorderLayout());
+            JBPanel<JBPanel<?>> existingPanel = new JBPanel<>();
+            existingPanel.setLayout(new BorderLayout());
+            JBPanel<JBPanel<?>> newPanel = new JBPanel<>();
+            newPanel.setLayout(new BorderLayout());
+            mainPanel.add(existingPanel, WEST);
+            mainPanel.add(newPanel,EAST);
 
             // Weekly summary at top
+            JPanel summaryPanel = weeklySummary(weeklyExecutions, weeklySuccessful, weeklyFailed, weeklyDuration);
+
+            existingPanel.add(summaryPanel, NORTH);
+            // Weekly summary at top
+            JPanel newSummaryPanel = weeklySummary(weeklyExecutions, weeklySuccessful, weeklyFailed, weeklyDuration);
+
+            newPanel.add(newSummaryPanel, NORTH);
+
+            // Table in center
+            existingMetricsTable = new JTable(model);
+
+            tableInCenter( existingPanel,existingMetricsTable);
+            newMetricTable = new JTable(newModel);
+            tableInCenter( newPanel, newMetricTable);
+
+            // Note at bottom
+            noteAtBottom(existingPanel);
+            noteAtBottom(newPanel);
+            return mainPanel;
+        }
+
+        private void noteAtBottom(JBPanel<JBPanel<?>> targetPanel) {
+            JLabel statsLabel = new JLabel("Note: Stats are tracked per IDE session and persist across restarts.");
+            targetPanel.add(statsLabel, BorderLayout.SOUTH);
+        }
+
+        private void tableInCenter( JBPanel<JBPanel<?>> targetPanel, JTable metricsTable) {
+
+            metricsTable.setFillsViewportHeight(true);
+            JScrollPane scrollPane = new JScrollPane(metricsTable);
+            targetPanel.add(scrollPane, BorderLayout.CENTER);
+        }
+
+        private static @NotNull JPanel weeklySummary(int weeklyExecutions, int weeklySuccessful, int weeklyFailed, long weeklyDuration) {
             JPanel summaryPanel = new JPanel(new GridLayout(1, 3));
             summaryPanel.add(new JLabel("Last 7 days: " + weeklyExecutions + " test executions"));
             summaryPanel.add(new JLabel("Success rate: " +
@@ -103,19 +149,7 @@ public class DXToolWindowFactory implements ToolWindowFactory {
                     (weeklyExecutions > 0 ? (weeklyFailed * 100 / weeklyExecutions) + "%" : "N/A")));
             summaryPanel.add(new JLabel("Avg duration: " +
                     (weeklyExecutions > 0 ? (weeklyDuration / weeklyExecutions) + " ms" : "N/A")));
-
-            panel.add(summaryPanel, BorderLayout.NORTH);
-
-            // Table in center
-            metricsTable = new JTable(model);
-            metricsTable.setFillsViewportHeight(true);
-            JScrollPane scrollPane = new JScrollPane(metricsTable);
-            panel.add(scrollPane, BorderLayout.CENTER);
-
-            // Note at bottom
-            JLabel statsLabel = new JLabel("Note: Stats are tracked per IDE session and persist across restarts.");
-            panel.add(statsLabel, BorderLayout.SOUTH);
-            return panel;
+            return summaryPanel;
         }
 
         private TableModel generateMetricsTableModel(DXInsightService.State state) {
