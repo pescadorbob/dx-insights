@@ -33,19 +33,8 @@ class NewDXToolWindow {
         this.dxToolWindowFactory = dxToolWindowFactory;
         this.project = project;
         service = toolWindow.getProject().getService(DXInsightService.class);
-        subscribeToMetricsUpdates();
     }
 
-    private void subscribeToMetricsUpdates() {
-        MessageBusConnection messageBus;
-        messageBus = project.getMessageBus().connect();
-        messageBus.subscribe(TestMetricsChangedListener.TEST_METRICS_CHANGED_TOPIC, new TestMetricsChangedListener() {
-            @Override
-            public void testMetricsChanged() {
-                updateStats();
-            }
-        });
-    }
 
     public void updateStats() {
         DXInsightService service = project.getService(DXInsightService.class);

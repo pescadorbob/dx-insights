@@ -9,6 +9,7 @@ import com.github.pescadorbob.dxinsights.scan.start.StartScan;
 import com.github.pescadorbob.dxinsights.start.ForStoringStats;
 import com.github.pescadorbob.dxinsights.start.IntellijPersistentStateBuildScanRepository;
 
+
 import java.time.Clock;
 
 public class DXInsightServiceConfiguration {
@@ -46,5 +47,6 @@ public class DXInsightServiceConfiguration {
     public BrowseStats getBrowseStats() {
         return new BrowseStats(dxInsightService,getStatsRepository());
     }
+
 
 }

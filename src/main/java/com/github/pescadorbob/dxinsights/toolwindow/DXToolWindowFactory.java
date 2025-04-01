@@ -40,10 +40,22 @@ public class DXToolWindowFactory implements ToolWindowFactory, ForBrowsingStats 
         BrowseStats browseStats = new BrowseStats(this,config.getStatsRepository());
         var dxToolWindow = new DXToolWindow(project, toolWindow);
         newDxToolWindow = new NewDXToolWindow(this, project, toolWindow);
+        subscribeToMetricsUpdates(project);
         var parentToolWindows = new ParentToolWindows(dxToolWindow, newDxToolWindow);
         var content = ContentFactory.getInstance().createContent(parentToolWindows.getContent(), null, false);
         toolWindow.getContentManager().addContent(content);
     }
+    private void subscribeToMetricsUpdates(Project project) {
+        MessageBusConnection messageBus;
+        messageBus = project.getMessageBus().connect();
+        messageBus.subscribe(TestMetricsChangedListener.TEST_METRICS_CHANGED_TOPIC, new TestMetricsChangedListener() {
+            @Override
+            public void testMetricsChanged() {
+                newDxToolWindow.updateStats();
+            }
+        });
+    }
+
 
     @Override
     public void updateUi(Map<LocalDate, DailyStats> dailyStats) {
