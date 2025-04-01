@@ -1,6 +1,6 @@
-package com.dx.insights.startup;
+package com.dx.insights.intellij.plugin.startup;
 
-import com.dx.insights.service.DXInsightService;
+import com.dx.insights.intellij.plugin.service.DXInsightService;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.startup.ProjectActivity;

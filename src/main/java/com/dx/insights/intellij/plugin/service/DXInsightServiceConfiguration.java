@@ -1,5 +1,6 @@
-package com.dx.insights.service;
+package com.dx.insights.intellij.plugin.service;
 
+import com.dx.insights.core.identity.UUIDBuildIdGenerator;
 import com.dx.insights.core.usecases.browse.BrowseStats;
 import com.dx.insights.core.usecases.complete.CompleteScan;
 import com.dx.insights.core.defense.guards.ForGeneratingBuildIds;

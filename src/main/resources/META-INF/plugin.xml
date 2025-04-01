@@ -20,10 +20,10 @@
     <resource-bundle>messages.MyBundle</resource-bundle>
 
     <extensions defaultExtensionNs="com.intellij">
-        <toolWindow factoryClass="com.dx.insights.toolwindow.DXToolWindowFactory" id="DXToolWindow"/>
-        <applicationService serviceImplementation="com.dx.insights.service.DXInsightService"/>
-        <projectService serviceImplementation="com.dx.insights.service.DXInsightService"/>
-        <postStartupActivity implementation="com.dx.insights.startup.TestMetricsStartupActivity"/>
+        <toolWindow factoryClass="com.dx.insights.intellij.plugin.toolwindow.DXToolWindowFactory" id="DXToolWindow"/>
+        <applicationService serviceImplementation="com.dx.insights.intellij.plugin.service.DXInsightService"/>
+        <projectService serviceImplementation="com.dx.insights.intellij.plugin.service.DXInsightService"/>
+        <postStartupActivity implementation="com.dx.insights.intellij.plugin.startup.TestMetricsStartupActivity"/>
         <projectService serviceImplementation="com.dx.insights.core.usecases.start.IntellijPersistentStateBuildScanRepository"/>
         <postStartupActivity implementation="com.dx.insights.startup.MyProjectActivity" />
     </extensions>

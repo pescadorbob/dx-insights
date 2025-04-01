@@ -1,6 +1,6 @@
-package com.dx.insights.toolwindow;
+package com.dx.insights.intellij.plugin.toolwindow;
 
-import com.dx.insights.service.DXInsightService;
+import com.dx.insights.intellij.plugin.service.DXInsightService;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.wm.ToolWindow;
 import com.intellij.ui.components.JBPanel;

@@ -1,4 +1,4 @@
-package com.dx.insights.service;
+package com.dx.insights.intellij.plugin.service;
 
 import com.dx.insights.core.usecases.browse.ForBrowsingStats;
 import com.dx.insights.core.usecases.complete.CompleteScan;
@@ -7,7 +7,7 @@ import com.dx.insights.core.domain.BuildScan;
 import com.dx.insights.core.usecases.start.ForNotifyingUI;
 import com.dx.insights.core.usecases.start.StartScan;
 import com.dx.insights.core.usecases.start.IntellijPersistentStateBuildScanRepository;
-import com.dx.insights.toolwindow.TestMetricsChangedListener;
+import com.dx.insights.intellij.plugin.toolwindow.TestMetricsChangedListener;
 import com.intellij.execution.ExecutionListener;
 import com.intellij.execution.ExecutionManager;
 import com.intellij.execution.configurations.RunProfile;

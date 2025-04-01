@@ -1,4 +1,4 @@
-package com.dx.insights.toolwindow;
+package com.dx.insights.intellij.plugin.toolwindow;
 
 import com.intellij.util.messages.Topic;
 

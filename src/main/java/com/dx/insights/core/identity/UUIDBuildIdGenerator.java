@@ -1,4 +1,4 @@
-package com.dx.insights.service;
+package com.dx.insights.core.identity;
 
 import com.dx.insights.core.defense.guards.ForGeneratingBuildIds;
 import com.dx.insights.core.domain.BuildId;
