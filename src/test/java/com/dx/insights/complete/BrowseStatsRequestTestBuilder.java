@@ -1,6 +1,6 @@
 package com.dx.insights.complete;
 
-import com.dx.insights.browse.BrowseStatsRequest;
+import com.dx.insights.usecases.browse.BrowseStatsRequest;
 
 public class BrowseStatsRequestTestBuilder {
 

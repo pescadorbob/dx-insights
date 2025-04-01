@@ -1,25 +1,20 @@
-package com.dx.insights.complete;
+package com.dx.insights.usecases.start;
 
 import com.dx.insights.domain.guards.ForGeneratingBuildIds;
-import com.dx.insights.usecases.start.ForNotifyingUI;
-import com.dx.insights.usecases.start.ForStoringScans;
-import com.dx.insights.usecases.start.ForStoringStats;
 
 import java.time.Clock;
 import java.time.ZonedDateTime;
 
-public class CompleteScanTestBuilder {
-
+public class StartScanTestBuilder {
     private Clock clock;
     private ForStoringScans scanRepository;
     private ForGeneratingBuildIds buildIdGenerator;
     private ForNotifyingUI forNotifyingUI;
     private ForStoringStats forStoringStats;
 
-    public static CompleteScanTestBuilder aCompleteScan(){
-        return new CompleteScanTestBuilder();
+    public static  StartScanTestBuilder aStartScan() {
+        return new StartScanTestBuilder();
     }
-
     public static Clock clockAtTime(String time){
         var parsedDateTime = atTime(time);
         return Clock.fixed(parsedDateTime.toInstant(),parsedDateTime.getZone());
@@ -31,34 +26,33 @@ public class CompleteScanTestBuilder {
         return ZonedDateTime.parse(isoTime);
     }
 
-    public CompleteScanTestBuilder withClock(Clock testClock) {
+    public StartScanTestBuilder withClock(Clock testClock) {
         this.clock = testClock;
         return this;
     }
 
-    public CompleteScan build() {
-        return new CompleteScan(clock,scanRepository,buildIdGenerator, forNotifyingUI,forStoringStats);
+    public StartScan build() {
+        return new StartScan(clock,scanRepository,buildIdGenerator, forNotifyingUI,forStoringStats);
     }
 
-    public CompleteScanTestBuilder withScanRepository(ForStoringScans scanRepository) {
+    public StartScanTestBuilder withScanRepository(ForStoringScans scanRepository) {
         this.scanRepository = scanRepository;
         return this;
     }
 
-    public CompleteScanTestBuilder withScanUI(ForNotifyingUI forNotifyingUI) {
+    public StartScanTestBuilder withScanUI(ForNotifyingUI forNotifyingUI) {
         this.forNotifyingUI = forNotifyingUI;
         return this;
     }
 
-    public CompleteScanTestBuilder withBuildIdGenerator(ForGeneratingBuildIds buildIdGenerator) {
+    public StartScanTestBuilder withBuildIdGenerator(ForGeneratingBuildIds buildIdGenerator) {
         this.buildIdGenerator = buildIdGenerator;
         return this;
     }
 
 
-    public CompleteScanTestBuilder withStatsRepository(ForStoringStats forStoringStats) {
+    public StartScanTestBuilder withStatsRepository(ForStoringStats forStoringStats) {
         this.forStoringStats = forStoringStats;
         return this;
     }
-
 }

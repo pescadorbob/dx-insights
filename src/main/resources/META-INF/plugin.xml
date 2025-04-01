@@ -24,7 +24,7 @@
         <applicationService serviceImplementation="com.dx.insights.service.DXInsightService"/>
         <projectService serviceImplementation="com.dx.insights.service.DXInsightService"/>
         <postStartupActivity implementation="com.dx.insights.startup.TestMetricsStartupActivity"/>
-        <projectService serviceImplementation="com.dx.insights.start.IntellijPersistentStateBuildScanRepository"/>
+        <projectService serviceImplementation="com.dx.insights.usecases.start.IntellijPersistentStateBuildScanRepository"/>
         <postStartupActivity implementation="com.dx.insights.startup.MyProjectActivity" />
     </extensions>
 

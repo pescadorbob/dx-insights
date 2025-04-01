@@ -1,8 +1,8 @@
 package com.dx.insights.domain;
 
 
-import com.dx.insights.scan.start.BuildId;
-import com.dx.insights.start.BuildScanStatus;
+import com.dx.insights.usecases.start.BuildId;
+import com.dx.insights.usecases.start.BuildScanStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;

@@ -1,12 +1,12 @@
 package com.dx.insights.service;
 
-import com.dx.insights.browse.ForBrowsingStats;
+import com.dx.insights.usecases.browse.ForBrowsingStats;
 import com.dx.insights.complete.CompleteScan;
 import com.dx.insights.complete.CompleteScanRequest;
 import com.dx.insights.domain.BuildScan;
-import com.dx.insights.scan.start.ForNotifyingUI;
-import com.dx.insights.scan.start.StartScan;
-import com.dx.insights.start.IntellijPersistentStateBuildScanRepository;
+import com.dx.insights.usecases.start.ForNotifyingUI;
+import com.dx.insights.usecases.start.StartScan;
+import com.dx.insights.usecases.start.IntellijPersistentStateBuildScanRepository;
 import com.dx.insights.toolwindow.TestMetricsChangedListener;
 import com.intellij.execution.ExecutionListener;
 import com.intellij.execution.ExecutionManager;
@@ -72,7 +72,7 @@ public final class DXInsightService implements PersistentStateComponent<DXInsigh
     }
 
     @Override
-    public void updateUi(Map<LocalDate, com.dx.insights.start.DailyStats> dailyStats) {
+    public void updateUi(Map<LocalDate, com.dx.insights.usecases.start.DailyStats> dailyStats) {
         publishMetricsUpdated();
     }
 
