@@ -1,12 +1,12 @@
 package com.dx.insights.service;
 
-import com.dx.insights.usecases.browse.BrowseStats;
-import com.dx.insights.complete.CompleteScan;
-import com.dx.insights.domain.guards.ForGeneratingBuildIds;
-import com.dx.insights.usecases.start.ForStoringScans;
-import com.dx.insights.usecases.start.StartScan;
-import com.dx.insights.usecases.start.ForStoringStats;
-import com.dx.insights.usecases.start.IntellijPersistentStateBuildScanRepository;
+import com.dx.insights.core.usecases.browse.BrowseStats;
+import com.dx.insights.core.usecases.complete.CompleteScan;
+import com.dx.insights.core.domain.guards.ForGeneratingBuildIds;
+import com.dx.insights.core.usecases.start.ForStoringScans;
+import com.dx.insights.core.usecases.start.StartScan;
+import com.dx.insights.core.usecases.start.ForStoringStats;
+import com.dx.insights.core.usecases.start.IntellijPersistentStateBuildScanRepository;
 
 
 import java.time.Clock;

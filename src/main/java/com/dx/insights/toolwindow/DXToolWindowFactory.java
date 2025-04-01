@@ -1,11 +1,11 @@
 package com.dx.insights.toolwindow;
 
-import com.dx.insights.usecases.browse.BrowseStats;
-import com.dx.insights.usecases.browse.ForBrowsingStats;
+import com.dx.insights.core.usecases.browse.BrowseStats;
+import com.dx.insights.core.usecases.browse.ForBrowsingStats;
 import com.dx.insights.service.DXInsightService;
 import com.dx.insights.service.DXInsightServiceConfiguration;
-import com.dx.insights.usecases.start.DailyStats;
-import com.dx.insights.usecases.start.IntellijPersistentStateBuildScanRepository;
+import com.dx.insights.core.usecases.start.DailyStats;
+import com.dx.insights.core.usecases.start.IntellijPersistentStateBuildScanRepository;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.wm.ToolWindow;
 import com.intellij.openapi.wm.ToolWindowFactory;

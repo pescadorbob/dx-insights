@@ -1,7 +1,7 @@
 package com.dx.insights.service;
 
-import com.dx.insights.domain.guards.ForGeneratingBuildIds;
-import com.dx.insights.usecases.start.BuildId;
+import com.dx.insights.core.domain.guards.ForGeneratingBuildIds;
+import com.dx.insights.core.usecases.start.BuildId;
 
 public class UUIDBuildIdGenerator implements ForGeneratingBuildIds {
     @Override
