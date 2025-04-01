@@ -37,11 +37,15 @@ dependencies {
     testCompileOnly(libs.lombok)
     testAnnotationProcessor(libs.lombok)
 
-    testImplementation(libs.junit)
-    testImplementation(libs.opentest4j)
+
+    // JUnit dependencies
+    testImplementation(platform(libs.junitBom))
     testImplementation(libs.junitJupiterApi)
     testImplementation(libs.junitJupiterParams)
     testRuntimeOnly(libs.junitJupiterEngine)
+    testRuntimeOnly(libs.junitPlatformLauncher)
+
+    testImplementation(libs.opentest4j)
     testImplementation(libs.assertj)
 
     // IntelliJ Platform Gradle Plugin Dependencies Extension - read more: https://plugins.jetbrains.com/docs/intellij/tools-intellij-platform-gradle-plugin-dependencies-extension.html
@@ -168,5 +172,12 @@ intellijPlatformTesting {
     }
 }
 configurations.all {
-    exclude(group = "junit", module = "junit")  // Excludes JUnit 4
+    resolutionStrategy {
+        force(libs.junitJupiterApi.get())
+        force(libs.junitJupiterEngine.get())
+        force(libs.junitPlatformLauncher.get())
+
+        // Exclude JUnit 4
+        exclude(group = "junit", module = "junit")
+    }
 }
