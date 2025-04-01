@@ -2,7 +2,7 @@ package com.dx.insights.service;
 
 import com.dx.insights.core.usecases.browse.BrowseStats;
 import com.dx.insights.core.usecases.complete.CompleteScan;
-import com.dx.insights.core.domain.guards.ForGeneratingBuildIds;
+import com.dx.insights.core.defense.guards.ForGeneratingBuildIds;
 import com.dx.insights.core.usecases.start.ForStoringScans;
 import com.dx.insights.core.usecases.start.StartScan;
 import com.dx.insights.core.usecases.start.ForStoringStats;

@@ -1,4 +1,4 @@
-package com.dx.insights.core.domain.guards;
+package com.dx.insights.core.defense.guards;
 
 import lombok.experimental.UtilityClass;
 

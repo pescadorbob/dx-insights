@@ -1,7 +1,7 @@
 package com.dx.insights.core.usecases.start;
 
 import com.dx.insights.core.domain.BuildScan;
-import com.dx.insights.core.domain.guards.ForGeneratingBuildIds;
+import com.dx.insights.core.defense.guards.ForGeneratingBuildIds;
 
 import java.time.*;
 

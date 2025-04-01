@@ -1,6 +1,6 @@
 package com.dx.insights.core.usecases.complete;
 
-import com.dx.insights.core.domain.guards.ForGeneratingBuildIds;
+import com.dx.insights.core.defense.guards.ForGeneratingBuildIds;
 import com.dx.insights.core.usecases.start.ForNotifyingUI;
 import com.dx.insights.core.usecases.start.ForStoringScans;
 import com.dx.insights.core.usecases.start.ForStoringStats;
