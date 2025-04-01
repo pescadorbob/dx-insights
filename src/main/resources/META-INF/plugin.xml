@@ -20,12 +20,12 @@
     <resource-bundle>messages.MyBundle</resource-bundle>
 
     <extensions defaultExtensionNs="com.intellij">
-        <toolWindow factoryClass="com.github.pescadorbob.dxinsights.toolwindow.DXToolWindowFactory" id="DXToolWindow"/>
-        <applicationService serviceImplementation="com.github.pescadorbob.dxinsights.service.DXInsightService"/>
-        <projectService serviceImplementation="com.github.pescadorbob.dxinsights.service.DXInsightService"/>
-        <postStartupActivity implementation="com.github.pescadorbob.dxinsights.startup.TestMetricsStartupActivity"/>
-        <projectService serviceImplementation="com.github.pescadorbob.dxinsights.start.IntellijPersistentStateBuildScanRepository"/>
-        <postStartupActivity implementation="com.github.pescadorbob.dxinsights.startup.MyProjectActivity" />
+        <toolWindow factoryClass="com.dx.insights.toolwindow.DXToolWindowFactory" id="DXToolWindow"/>
+        <applicationService serviceImplementation="com.dx.insights.service.DXInsightService"/>
+        <projectService serviceImplementation="com.dx.insights.service.DXInsightService"/>
+        <postStartupActivity implementation="com.dx.insights.startup.TestMetricsStartupActivity"/>
+        <projectService serviceImplementation="com.dx.insights.start.IntellijPersistentStateBuildScanRepository"/>
+        <postStartupActivity implementation="com.dx.insights.startup.MyProjectActivity" />
     </extensions>
 
     
