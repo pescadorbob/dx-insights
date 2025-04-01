@@ -1,7 +1,7 @@
 package com.dx.insights.core.usecases.browse;
 
 
-import com.dx.insights.core.usecases.start.DailyStats;
+import com.dx.insights.core.domain.DailyStats;
 import com.dx.insights.core.usecases.start.FakeScanRepository;
 import com.dx.insights.core.usecases.start.FakeStatsRepository;
 import org.junit.jupiter.api.Test;

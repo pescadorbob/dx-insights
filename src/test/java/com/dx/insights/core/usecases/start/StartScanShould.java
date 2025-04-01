@@ -1,12 +1,13 @@
 package com.dx.insights.core.usecases.start;
 
 
+import com.dx.insights.core.domain.BuildId;
 import com.dx.insights.core.domain.BuildScan;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
 
-import static com.dx.insights.core.usecases.start.BuildScanStatus.IN_PROGRESS;
+import static com.dx.insights.core.domain.BuildScanStatus.IN_PROGRESS;
 import static com.dx.insights.core.usecases.start.BuildScanTestBuilder.aBuildScan;
 import static com.dx.insights.core.usecases.start.DailyStatsTestBuilder.aDailyStats;
 import static com.dx.insights.core.usecases.start.StartScanResultTestBuilder.aStartScanResult;

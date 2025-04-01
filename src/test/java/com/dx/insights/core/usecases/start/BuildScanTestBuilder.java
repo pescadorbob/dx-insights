@@ -1,6 +1,8 @@
 package com.dx.insights.core.usecases.start;
 
+import com.dx.insights.core.domain.BuildId;
 import com.dx.insights.core.domain.BuildScan;
+import com.dx.insights.core.domain.BuildScanStatus;
 
 import java.time.Duration;
 import java.time.ZonedDateTime;

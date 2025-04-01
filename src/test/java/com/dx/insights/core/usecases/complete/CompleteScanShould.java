@@ -2,7 +2,7 @@ package com.dx.insights.core.usecases.complete;
 
 
 import com.dx.insights.core.domain.BuildScan;
-import com.dx.insights.core.usecases.start.BuildId;
+import com.dx.insights.core.domain.BuildId;
 import com.dx.insights.core.usecases.start.ForNotifyingUI;
 import com.dx.insights.core.usecases.start.FakeBuildIdGenerator;
 import com.dx.insights.core.usecases.start.FakeIdGenerator;
@@ -14,7 +14,7 @@ import static com.dx.insights.core.usecases.complete.CompleteScanRequestTestBuil
 import static com.dx.insights.core.usecases.complete.CompleteScanResultTestBuilder.aCompleteScanResult;
 import static com.dx.insights.core.usecases.complete.CompleteScanTestBuilder.aCompleteScan;
 import static com.dx.insights.core.usecases.complete.CompleteScanTestBuilder.atTime;
-import static com.dx.insights.core.usecases.start.BuildScanStatus.SUCCESSFUL;
+import static com.dx.insights.core.domain.BuildScanStatus.SUCCESSFUL;
 import static com.dx.insights.core.usecases.start.BuildScanTestBuilder.DEFAULT_START_TIME;
 import static com.dx.insights.core.usecases.start.BuildScanTestBuilder.aBuildScan;
 import static com.dx.insights.core.usecases.start.DailyStatsTestBuilder.aDailyStats;

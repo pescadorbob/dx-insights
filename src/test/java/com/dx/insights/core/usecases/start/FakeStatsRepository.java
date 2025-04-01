@@ -1,5 +1,7 @@
 package com.dx.insights.core.usecases.start;
 
+import com.dx.insights.core.domain.DailyStats;
+
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
@@ -7,7 +9,7 @@ import java.util.Map;
 import static com.dx.insights.core.usecases.start.DailyStatsTestBuilder.aDailyStats;
 
 public class FakeStatsRepository implements ForStoringStats {
-    private final Map<LocalDate,DailyStats> stats;
+    private final Map<LocalDate, DailyStats> stats;
     public FakeStatsRepository(){
         stats = new HashMap<>();
     }

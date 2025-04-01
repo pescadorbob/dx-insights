@@ -1,4 +1,4 @@
-package com.dx.insights.core.usecases.start;
+package com.dx.insights.core.domain;
 
 public enum BuildScanStatus {
     IN_PROGRESS,

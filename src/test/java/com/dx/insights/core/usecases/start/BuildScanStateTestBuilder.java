@@ -1,6 +1,9 @@
 package com.dx.insights.core.usecases.start;
 
+import com.dx.insights.core.domain.BuildId;
 import com.dx.insights.core.domain.BuildScan;
+import com.dx.insights.core.domain.BuildScanState;
+import com.dx.insights.core.domain.DailyStats;
 
 import java.time.LocalDate;
 import java.util.HashMap;

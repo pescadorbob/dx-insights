@@ -2,17 +2,17 @@ package com.dx.insights.core.usecases.complete;
 
 import com.dx.insights.core.domain.BuildScan;
 import com.dx.insights.core.defense.guards.ForGeneratingBuildIds;
-import com.dx.insights.core.usecases.start.BuildId;
+import com.dx.insights.core.domain.BuildId;
 import com.dx.insights.core.usecases.start.ForNotifyingUI;
 import com.dx.insights.core.usecases.start.ForStoringScans;
-import com.dx.insights.core.usecases.start.DailyStats;
+import com.dx.insights.core.domain.DailyStats;
 import com.dx.insights.core.usecases.start.ForStoringStats;
 
 import java.time.Clock;
 import java.time.Duration;
 import java.time.LocalDate;
 
-import static com.dx.insights.core.usecases.start.BuildScanStatus.SUCCESSFUL;
+import static com.dx.insights.core.domain.BuildScanStatus.SUCCESSFUL;
 
 public class CompleteScan {
     private final Clock clock;

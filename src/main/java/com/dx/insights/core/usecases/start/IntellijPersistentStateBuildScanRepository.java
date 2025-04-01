@@ -1,6 +1,9 @@
 package com.dx.insights.core.usecases.start;
 
+import com.dx.insights.core.domain.BuildId;
 import com.dx.insights.core.domain.BuildScan;
+import com.dx.insights.core.domain.BuildScanState;
+import com.dx.insights.core.domain.DailyStats;
 import com.intellij.openapi.components.PersistentStateComponent;
 import com.intellij.openapi.components.State;
 import com.intellij.openapi.components.Storage;

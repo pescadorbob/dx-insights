@@ -2,6 +2,8 @@ package com.dx.insights.core.usecases.start;
 
 import com.dx.insights.core.domain.BuildScan;
 import com.dx.insights.core.defense.guards.ForGeneratingBuildIds;
+import com.dx.insights.core.domain.BuildScanStatus;
+import com.dx.insights.core.domain.DailyStats;
 
 import java.time.*;
 

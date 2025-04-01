@@ -1,5 +1,7 @@
 package com.dx.insights.core.usecases.start;
 
+import com.dx.insights.core.domain.DailyStats;
+
 import java.time.LocalDate;
 import java.util.Map;
 

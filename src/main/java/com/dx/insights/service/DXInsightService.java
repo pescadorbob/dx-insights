@@ -72,7 +72,7 @@ public final class DXInsightService implements PersistentStateComponent<DXInsigh
     }
 
     @Override
-    public void updateUi(Map<LocalDate, com.dx.insights.core.usecases.start.DailyStats> dailyStats) {
+    public void updateUi(Map<LocalDate, com.dx.insights.core.domain.DailyStats> dailyStats) {
         publishMetricsUpdated();
     }
 
