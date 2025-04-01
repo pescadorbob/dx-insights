@@ -3,6 +3,7 @@ package com.github.pescadorbob.dxinsights.service;
 import com.github.pescadorbob.dxinsights.browse.BrowseStats;
 import com.github.pescadorbob.dxinsights.browse.ForBrowsingStats;
 import com.github.pescadorbob.dxinsights.complete.CompleteScan;
+import com.github.pescadorbob.dxinsights.complete.CompleteScanRequest;
 import com.github.pescadorbob.dxinsights.domain.BuildScan;
 import com.github.pescadorbob.dxinsights.scan.start.ForNotifyingUI;
 import com.github.pescadorbob.dxinsights.scan.start.StartScan;
@@ -43,7 +44,6 @@ public final class DXInsightService implements PersistentStateComponent<DXInsigh
     private final Map<String, Long> testStartTimes = new HashMap<>();
     private final StartScan startScan;
     private final CompleteScan completeScan ;
-    private final BrowseStats browseStats;
 
 
     public DXInsightService(Project project) {
@@ -53,7 +53,6 @@ public final class DXInsightService implements PersistentStateComponent<DXInsigh
         var config = new DXInsightServiceConfiguration(this, stateRepository);
         this.startScan = config.getStartScan();
         this.completeScan = config.getCompleteScan();
-        this.browseStats = config.getBrowseStats();
         initialize();
     }
 
@@ -92,11 +91,15 @@ public final class DXInsightService implements PersistentStateComponent<DXInsigh
     private class TestExecutionListener implements ExecutionListener {
 
 
+        // runId to buildId
+        private Map<String,String> buildScans = new HashMap<>();
+
         @Override
         public void processStarted(@NotNull String executorId, @NotNull ExecutionEnvironment env, @NotNull ProcessHandler handler) {
             if (isTestRun(env)) {
-                startScan.execute();
+                var response = startScan.execute();
                 String runId = env.getExecutionId() + ":" + env.getExecutor().getId();
+                buildScans.put(runId,response.getBuildId());
                 testStartTimes.put(runId, System.currentTimeMillis());
 
                 LOG.info("Test execution started: " + getTestName(env));
@@ -114,6 +117,7 @@ public final class DXInsightService implements PersistentStateComponent<DXInsigh
         @Override
         public void processTerminated(@NotNull String executorId, @NotNull ExecutionEnvironment env, @NotNull ProcessHandler handler, int exitCode) {
             String runId = env.getExecutionId() + ":" + env.getExecutor().getId();
+            var response = completeScan.execute(new CompleteScanRequest(buildScans.get(runId)));
             Long startTime = testStartTimes.remove(runId);
 
             if (startTime != null) {
