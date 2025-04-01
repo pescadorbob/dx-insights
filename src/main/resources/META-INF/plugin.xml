@@ -1,6 +1,6 @@
 <!-- Plugin Configuration File. Read more: https://plugins.jetbrains.com/docs/intellij/plugin-configuration-file.html -->
 <idea-plugin>
-    <id>com.github.pescadorbob.dxinsights</id>
+    <id>com.dx.insights</id>
     <name>DX Insights</name>
     <vendor email="pescador.bob@gmail.com" url="https://github.com/pescadorbob">Brent Fisher</vendor>
 
@@ -21,10 +21,8 @@
 
     <extensions defaultExtensionNs="com.intellij">
         <toolWindow factoryClass="com.dx.insights.intellij.plugin.toolwindow.DXToolWindowFactory" id="DXToolWindow"/>
-        <applicationService serviceImplementation="com.dx.insights.intellij.plugin.service.DXInsightService"/>
-        <projectService serviceImplementation="com.dx.insights.intellij.plugin.service.DXInsightService"/>
-        <postStartupActivity implementation="com.dx.insights.intellij.plugin.startup.TestMetricsStartupActivity"/>
         <projectService serviceImplementation="com.dx.insights.core.usecases.start.IntellijPersistentStateBuildScanRepository"/>
+        <postStartupActivity implementation="com.dx.insights.intellij.plugin.startup.TestMetricsStartupActivity"/>
         <postStartupActivity implementation="com.dx.insights.startup.MyProjectActivity" />
     </extensions>
 
